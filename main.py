@@ -19,7 +19,6 @@ from operations import (
 from models import CarroConId, CompradorConId
 
 app = FastAPI()
-
 @app.get("/")
 async def root():
     return {"message": "Bienvenido a la API de carros y compradores"}
