@@ -1,0 +1,34 @@
+ID,Marca,Modelo,Precio,Cilindrada,Potencia,Estado,Eliminado
+1,string,string,string,0,0,string,string
+2,Chevrolet,Spark GT,$27.000.000,1200,80,Vendido,No
+3,Chevrolet,Cruze,$45.000.000,1800,140,Activo,No
+4,Chevrolet,Tracker,$54.000.000,1600,130,Activo,No
+5,Chevrolet,Trailblazer,$82.000.000,3600,230,Activo,No
+6,Renault,Clio,$19.000.000,1400,75,Vendido,No
+7,Renault,Twingo,$15.500.000,1100,60,Activo,No
+8,Renault,Sandero,$34.000.000,1600,105,Vendido,si
+9,Renault,Duster,$58.000.000,2000,138,Activo,No
+10,Renault,Koleos,$75.000.000,2500,170,Vendido,No
+11,Mazda,2,$42.000.000,1500,106,Activo,No
+12,Mazda,3,$52.000.000,2000,155,Activo,No
+13,Mazda,6,$75.000.000,2500,185,Activo,No
+14,Mazda,CX-3,$70.000.000,2000,148,Activo,No
+15,Mazda,CX-5,$90.000.000,2500,188,Vendido,No
+16,Kia,Picanto,$28.000.000,1200,84,Activo,No
+17,Kia,Rio,$38.000.000,1400,100,Activo,No
+18,Kia,Cerato,$55.000.000,1600,130,Activo,No
+19,Kia,Sportage,$85.000.000,2400,181,Activo,No
+20,Kia,Sorento,$105.000.000,3300,240,Vendido,No
+21,Hyundai,i10,$29.000.000,1200,86,Activo,No
+22,Hyundai,Accent,$40.000.000,1400,100,Activo,No
+23,Hyundai,Elantra,$58.000.000,1600,128,Activo,No
+24,Hyundai,Tucson,$78.000.000,2000,155,Vendido,No
+25,Hyundai,Santa Fe,$110.000.000,2400,185,Activo,No
+26,Toyota,Yaris,$45.000.000,1500,107,Activo,No
+27,Toyota,Corolla,$65.000.000,1800,140,Vendido,No
+28,Toyota,Avanza,$70.000.000,1500,103,Activo,No
+29,Toyota,RAV4,$95.000.000,2500,176,Activo,No
+30,Toyota,Fortuner,$135.000.000,2700,166,Vendido,No
+31,nissan,sentra,cincuenta y dos millones,1900,120,Activo,Si
+32,nissan,sentra,$52.000.000,1900,160,Activo,No
+33,nissan,sentra,$52.000.000,1900,160,Activo,No
