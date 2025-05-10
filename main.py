@@ -1,4 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from typing import List
 from operations import (
     leer_todos_los_carros,
@@ -19,9 +22,15 @@ from operations import (
 from models import CarroConId, CompradorConId
 
 app = FastAPI()
-@app.get("/")
-async def root():
-    return {"message": "Bienvenido a la API de carros y compradores"}
+
+# Configuración para servir archivos estáticos y HTML
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+# Vista principal HTML
+@app.get("/", include_in_schema=False)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 # ----- Carros -----
 

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Carros y Compradores</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    button {
+      padding: 6px 12px;
+      margin: 2px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-add {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-update {
+      background-color: #2196F3;
+      color: white;
+    }
+    .btn-delete {
+      background-color: #f44336;
+      color: white;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    form {
+      margin-bottom: 40px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gestión de Carros</h1>
+
+    <form id="formCarro">
+      <h2>Agregar Carro</h2>
+      <div class="form-group"><input type="text" id="marca" placeholder="Marca" required></div>
+      <div class="form-group"><input type="text" id="modelo" placeholder="Modelo" required></div>
+      <div class="form-group"><input type="text" id="precio" placeholder="Precio" required></div>
+      <div class="form-group"><input type="number" id="cilindrada" placeholder="Cilindrada" required></div>
+      <div class="form-group"><input type="number" id="potencia" placeholder="Potencia" required></div>
+      <div class="form-group"><input type="text" id="estado" placeholder="Estado" required></div>
+      <button class="btn-add" type="submit">Agregar Carro</button>
+    </form>
+
+    <table id="carrosTable">
+      <thead>
+        <tr>
+          <th>ID</th><th>Marca</th><th>Modelo</th><th>Precio</th><th>Cilindrada</th>
+          <th>Potencia</th><th>Estado</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const apiUrl = "http://127.0.0.1:8000";
+
+    async function cargarCarros() {
+      const response = await fetch(`${apiUrl}/carros/activos`);
+      const carros = await response.json();
+      const tbody = document.querySelector("#carrosTable tbody");
+      tbody.innerHTML = "";
+      carros.forEach(carro => {
+        const fila = `
+          <tr>
+            <td>${carro.id}</td>
+            <td>${carro.marca}</td>
+            <td>${carro.modelo}</td>
+            <td>${carro.precio}</td>
+            <td>${carro.cilindrada}</td>
+            <td>${carro.potencia}</td>
+            <td>${carro.estado}</td>
+            <td>
+              <button class="btn-delete" onclick="eliminarCarro(${carro.id})">Eliminar</button>
+            </td>
+          </tr>`;
+        tbody.innerHTML += fila;
+      });
+    }
+
+    async function eliminarCarro(id) {
+      if (confirm("¿Seguro que quieres eliminar este carro?")) {
+        await fetch(`${apiUrl}/carro/${id}`, { method: "DELETE" });
+        cargarCarros();
+      }
+    }
+
+    document.querySelector("#formCarro").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        id: 0,
+        marca: document.getElementById("marca").value,
+        modelo: document.getElementById("modelo").value,
+        precio: document.getElementById("precio").value,
+        cilindrada: parseInt(document.getElementById("cilindrada").value),
+        potencia: parseInt(document.getElementById("potencia").value),
+        estado: document.getElementById("estado").value,
+        eliminado: "no"
+      };
+
+      const res = await fetch(`${apiUrl}/carro`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        document.querySelector("#formCarro").reset();
+        cargarCarros();
+      } else {
+        alert("Error al agregar carro");
+      }
+    });
+
+    cargarCarros();
+  </script>
+</body>
+</html>
