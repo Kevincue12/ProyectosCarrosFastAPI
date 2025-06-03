@@ -17,7 +17,6 @@ from operations import (
     actualizar_comprador
 )
 from models import CarroConId, CompradorConId
-
 app = FastAPI()
 @app.get("/")
 async def root():
