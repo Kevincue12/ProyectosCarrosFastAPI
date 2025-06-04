@@ -1,4 +1,4 @@
-ID,Nombre,Apellido,Marca, Modelo,SaldoPendiente,Placa
+ID,Nombre,Apellido,Marca,Modelo,SaldoPendiente,Placa
 1,Sandra,Villamil,Chevrolet,Spark,$14.000.000,HJI577
 2,Juan,Pérez,Ford,Fiesta,$8.000.000,ABC123
 3,Ana,Gómez,Toyota,Yaris,$10.000.000,XYZ456
@@ -8,4 +8,5 @@ ID,Nombre,Apellido,Marca, Modelo,SaldoPendiente,Placa
 7,Laura,Castillo,Kia,Rio,$7.500.000,DEF987
 8,Andrés,Suárez,Hyundai,Accent,$11.000.000,GHI234
 9,Patricia,Reyes,Mazda,3,$13.000.000,STU567
-10,Roberto,Salazar,Renault,Duster,$16.000.000,VWX890
+10,Roberto,Salazar,Renault,Duster,$16.000.000,VWX89011,jairo,cuy,,,966666,gky129
+11,jairo,cuy,,,966666,gky129

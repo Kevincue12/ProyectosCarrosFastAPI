@@ -1,6 +1,6 @@
 import csv
 from typing import List, Optional
-from models import CarroConId, CompradorConId
+from models import CarroConId, CompradorConId, Comprador
 
 def leer_todos_los_carros() -> List[CarroConId]:
     carros = []
@@ -101,15 +101,36 @@ def leer_todos_los_compradores() -> List[CompradorConId]:
         raise FileNotFoundError("Archivo de compradores no encontrado")
     return compradores
 
-def crear_comprador(comprador: CompradorConId) -> CompradorConId:
-    compradores = leer_todos_los_compradores()
-    comprador.id = max((c.id for c in compradores), default=0) + 1
+def crear_comprador(comprador: Comprador) -> CompradorConId:
+    nuevo_id = 1
+    try:
+        with open('compradores.csv', mode='r', encoding='utf-8') as archivo:
+            lector = csv.DictReader(archivo)
+            ids = [int(row['ID']) for row in lector]
+            if ids:
+                nuevo_id = max(ids) + 1
+    except FileNotFoundError:
+        pass  # Si no existe, se inicia con ID 1
+
     with open('compradores.csv', mode='a', newline='', encoding='utf-8') as archivo:
-        escritor = csv.writer(archivo)
+        campos = ['ID', 'Nombre', 'Apellido', 'Marca', 'Modelo', 'SaldoPendiente', 'Placa']
+        escritor = csv.DictWriter(archivo, fieldnames=campos)
+
         if archivo.tell() == 0:
-            escritor.writerow(['ID', 'Nombre', 'Apellido', 'Marca', 'Modelo', 'SaldoPendiente', 'Placa'])
-        escritor.writerow([comprador.id, comprador.nombre, comprador.apellido, comprador.marca, comprador.modelo, comprador.saldo_pendiente, comprador.placa])
-    return comprador
+            escritor.writeheader()
+
+        escritor.writerow({
+            'ID': nuevo_id,
+            'Nombre': comprador.nombre,
+            'Apellido': comprador.apellido,
+            'Marca': comprador.marca,
+            'Modelo': comprador.modelo,
+            'SaldoPendiente': comprador.saldo_pendiente,
+            'Placa': comprador.placa
+        })
+
+    return CompradorConId(id=nuevo_id, **comprador.dict())
+
 
 def actualizar_comprador(id_comprador: int, comprador_actualizado: CompradorConId) -> Optional[CompradorConId]:
     compradores = leer_todos_los_compradores()

@@ -10,8 +10,8 @@ class CarroConId(BaseModel):
     estado: str
     eliminado: str
 
-class CompradorConId(BaseModel):
-    id: int
+
+class Comprador(BaseModel):
     nombre: str
     apellido: str
     marca: str
@@ -19,4 +19,6 @@ class CompradorConId(BaseModel):
     saldo_pendiente: str
     placa: str
 
+class CompradorConId(Comprador):
+    id: int
 

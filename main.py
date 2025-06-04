@@ -18,7 +18,7 @@ from operations import (
     crear_comprador,
     actualizar_comprador
 )
-from models import CarroConId, CompradorConId
+from models import CarroConId, CompradorConId, Comprador
 
 app = FastAPI()
 
@@ -90,7 +90,7 @@ async def obtener_compradores():
     return leer_todos_los_compradores()
 
 @app.post("/comprador", response_model=CompradorConId)
-async def crear_nuevo_comprador(comprador: CompradorConId):
+async def crear_nuevo_comprador(comprador: Comprador):
     return crear_comprador(comprador)
 
 @app.put("/comprador/{id_comprador}", response_model=CompradorConId)

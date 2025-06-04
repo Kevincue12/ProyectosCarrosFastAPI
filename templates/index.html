@@ -228,6 +228,39 @@
       });
     }
 
+async function cargarCompradores() {
+  try {
+    const res = await fetch(`${api}/compradores`);
+    if (!res.ok) throw new Error("Error al cargar compradores");
+    const compradores = await res.json();
+    mostrarCompradores(compradores);
+  } catch (e) {
+    alert(e.message);
+  }
+}
+
+function mostrarCompradores(compradores) {
+  const tbody = document.querySelector("#tablaCompradores tbody");
+  tbody.innerHTML = "";
+  if (compradores.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No se encontraron compradores.</td></tr>`;
+    return;
+  }
+  compradores.forEach(c => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${c.id}</td>
+        <td>${c.nombre}</td>
+        <td>${c.apellido}</td>
+        <td>${c.marca}</td>
+        <td>${c.modelo}</td>
+        <td>${c.saldo_pendiente}</td>
+        <td>${c.placa}</td>
+      </tr>
+    `;
+  });
+}
+
     async function eliminarCarro(id) {
       if(!confirm("¿Seguro que deseas eliminar este carro?")) return;
       try {
