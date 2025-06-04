@@ -105,6 +105,7 @@
 
     <form id="formAgregarCarro">
       <h3>Agregar Carro</h3>
+      <div class="form-group"><input id="idCarro" type="number" min="1" placeholder="ID" required></div>
       <div class="form-group"><input id="marca" placeholder="Marca" required></div>
       <div class="form-group"><input id="modelo" placeholder="Modelo" required></div>
       <div class="form-group"><input id="precio" type="number" min="0" placeholder="Precio" required></div>
@@ -279,18 +280,6 @@
       }
     });
 
-    document.getElementById("formBuscarPlaca").addEventListener("submit", async e => {
-      e.preventDefault();
-      const placa = document.getElementById("buscarPlaca").value;
-      try {
-        const res = await fetch(`${api}/carro/placa/${placa}`);
-        if (!res.ok) throw new Error("Carro no encontrado por placa");
-        const carro = await res.json();
-        mostrarCarros([carro]);
-      } catch(e) {
-        alert(e.message);
-      }
-    });
 
     document.getElementById("formCrearComprador").addEventListener("submit", async e => {
       e.preventDefault();
