@@ -19,3 +19,4 @@ class CompradorConId(BaseModel):
     saldo_pendiente: str
     placa: str
 
+
