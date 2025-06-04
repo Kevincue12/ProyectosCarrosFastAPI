@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Comprador</title>
+</head>
+<body>
+    <h1>Editar Comprador</h1>
+    <form action="/comprador/{{ comprador.id }}" method="post">
+        <input type="hidden" name="_method" value="put">
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" value="{{ comprador.nombre }}" required><br>
+
+        <label>Apellido:</label>
+        <input type="text" name="apellido" value="{{ comprador.apellido }}" required><br>
+
+        <label>Marca:</label>
+        <input type="text" name="marca" value="{{ comprador.marca }}" required><br>
+
+        <label>Modelo:</label>
+        <input type="text" name="modelo" value="{{ comprador.modelo }}" required><br>
+
+        <label>Saldo Pendiente:</label>
+        <input type="text" name="saldo_pendiente" value="{{ comprador.saldo_pendiente }}" required><br>
+
+        <label>Placa:</label>
+        <input type="text" name="placa" value="{{ comprador.placa }}" required><br>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</body>
+</html>

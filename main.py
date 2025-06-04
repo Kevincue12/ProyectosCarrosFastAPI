@@ -1,4 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from typing import List
 from operations import (
     leer_todos_los_carros,
@@ -9,7 +12,6 @@ from operations import (
     crear_carro,
     actualizar_carro,
     buscar_carro_por_id,
-    buscar_carro_por_placa,
     buscar_y_modificar_carro_por_modelo,
     eliminar_carro,
     leer_todos_los_compradores,
@@ -17,12 +19,17 @@ from operations import (
     actualizar_comprador
 )
 from models import CarroConId, CompradorConId
-app = FastAPI()
-@app.get("/")
-async def root():
-    return {"message": "Bienvenido a la API de carros y compradores"}
 
-# ----- Carros -----
+app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/", include_in_schema=False)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# --- Carros ---
 
 @app.get("/carros", response_model=List[CarroConId])
 async def obtener_todos_los_carros():
@@ -69,13 +76,6 @@ async def buscar_carro_id(id_carro: int):
         raise HTTPException(status_code=404, detail="Carro no encontrado")
     return carro
 
-@app.get("/carro/placa/{placa}", response_model=CarroConId)
-async def buscar_carro_por_placa_endpoint(placa: str):
-    carro = buscar_carro_por_placa(placa)
-    if carro is None:
-        raise HTTPException(status_code=404, detail="Carro no encontrado por placa")
-    return carro
-
 @app.put("/carro/modelo/{modelo}", response_model=CarroConId)
 async def actualizar_carro_por_modelo(modelo: str, carro_actualizado: CarroConId):
     carro = buscar_y_modificar_carro_por_modelo(modelo, carro_actualizado)
@@ -83,7 +83,7 @@ async def actualizar_carro_por_modelo(modelo: str, carro_actualizado: CarroConId
         raise HTTPException(status_code=404, detail="Carro no encontrado por modelo")
     return carro
 
-# ----- Compradores -----
+# --- Compradores ---
 
 @app.get("/compradores", response_model=List[CompradorConId])
 async def obtener_compradores():
@@ -99,3 +99,12 @@ async def actualizar_comprador_por_id(id_comprador: int, comprador_actualizado: 
     if comprador is None:
         raise HTTPException(status_code=404, detail="Comprador no encontrado")
     return comprador
+
+@app.get("/comprador/{id_comprador}/editar", include_in_schema=False)
+async def formulario_editar_comprador(request: Request, id_comprador: int):
+    compradores = leer_todos_los_compradores()
+    comprador = next((c for c in compradores if c.id == id_comprador), None)
+    if comprador is None:
+        raise HTTPException(status_code=404, detail="Comprador no encontrado")
+    return templates.TemplateResponse("editar_comprador.html", {"request": request, "comprador": comprador})
+

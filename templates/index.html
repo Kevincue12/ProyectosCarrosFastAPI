@@ -1,161 +1,351 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Carros y Compradores</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
+      background: #eef2f3;
       margin: 0;
+      padding: 0;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .tab-button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .tab-button.active {
+      background-color: #0056b3;
+    }
+    .tab-content {
+      display: none;
       padding: 20px;
-    }
-    h1, h2 {
-      color: #333;
-    }
-    .container {
+      background: white;
       max-width: 1200px;
       margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+    .tab-content.active {
+      display: block;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .btn {
+      padding: 8px 14px;
+      margin: 4px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-primary { background: #28a745; color: white; }
+    .btn-info { background: #17a2b8; color: white; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 40px;
+      margin-top: 20px;
     }
     table, th, td {
       border: 1px solid #ccc;
     }
     th, td {
-      padding: 12px;
-      text-align: left;
+      padding: 10px;
+      text-align: center;
     }
     th {
-      background-color: #f0f0f0;
+      background: #f8f9fa;
     }
-    button {
-      padding: 6px 12px;
-      margin: 2px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .btn-add {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .btn-update {
-      background-color: #2196F3;
-      color: white;
-    }
-    .btn-delete {
-      background-color: #f44336;
-      color: white;
+    form {
+      margin-top: 20px;
     }
     .form-group {
       margin-bottom: 10px;
     }
-    input {
-      padding: 6px;
+    input, select {
+      padding: 8px;
       width: 100%;
       box-sizing: border-box;
     }
-    form {
-      margin-bottom: 40px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 6px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    .results {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Gestión de Carros</h1>
 
-    <form id="formCarro">
-      <h2>Agregar Carro</h2>
-      <div class="form-group"><input type="text" id="marca" placeholder="Marca" required></div>
-      <div class="form-group"><input type="text" id="modelo" placeholder="Modelo" required></div>
-      <div class="form-group"><input type="text" id="precio" placeholder="Precio" required></div>
-      <div class="form-group"><input type="number" id="cilindrada" placeholder="Cilindrada" required></div>
-      <div class="form-group"><input type="number" id="potencia" placeholder="Potencia" required></div>
-      <div class="form-group"><input type="text" id="estado" placeholder="Estado" required></div>
-      <button class="btn-add" type="submit">Agregar Carro</button>
-    </form>
-
-    <table id="carrosTable">
-      <thead>
-        <tr>
-          <th>ID</th><th>Marca</th><th>Modelo</th><th>Precio</th><th>Cilindrada</th>
-          <th>Potencia</th><th>Estado</th><th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <div class="tabs">
+    <button class="tab-button active" onclick="showTab('carros', event)">Carros</button>
+    <button class="tab-button" onclick="showTab('compradores', event)">Compradores</button>
   </div>
 
-  <script>
-    const apiUrl = "http://127.0.0.1:8000";
+  <div id="carros" class="tab-content active">
+    <h2>Gestión de Carros</h2>
+    <div>
+      <button class="btn btn-info" onclick="cargarCarros('todos')">Todos</button>
+      <button class="btn btn-info" onclick="cargarCarros('activos')">Activos</button>
+      <button class="btn btn-secondary" onclick="cargarCarros('eliminados')">Eliminados</button>
+      <button class="btn btn-secondary" onclick="cargarCarros('no_vendidos')">No Vendidos</button>
+      <button class="btn btn-secondary" onclick="cargarCarros('vendidos')">Vendidos</button>
+    </div>
 
-    async function cargarCarros() {
-      const response = await fetch(`${apiUrl}/carros/activos`);
-      const carros = await response.json();
-      const tbody = document.querySelector("#carrosTable tbody");
+    <form id="formAgregarCarro">
+      <h3>Agregar Carro</h3>
+      <div class="form-group"><input id="marca" placeholder="Marca" required></div>
+      <div class="form-group"><input id="modelo" placeholder="Modelo" required></div>
+      <div class="form-group"><input id="precio" type="number" min="0" placeholder="Precio" required></div>
+      <div class="form-group"><input id="cilindrada" type="number" min="0" placeholder="Cilindrada" required></div>
+      <div class="form-group"><input id="potencia" type="number" min="0" placeholder="Potencia" required></div>
+      <div class="form-group">
+        <select id="estado" required>
+          <option value="" disabled selected>Estado</option>
+          <option value="vendido">Vendido</option>
+          <option value="no vendido">No vendido</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" type="submit">Agregar Carro</button>
+    </form>
+
+    <form id="formBuscarId">
+      <h3>Buscar Carro por ID</h3>
+      <div class="form-group"><input id="buscarId" type="number" min="0" placeholder="ID del carro" required></div>
+      <button class="btn btn-info" type="submit">Buscar</button>
+    </form>
+
+
+    <div class="results">
+      <table id="tablaCarros">
+        <thead>
+          <tr><th>ID</th><th>Marca</th><th>Modelo</th><th>Precio</th><th>Cilindrada</th><th>Potencia</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+<div id="carros" class="tab-content active">
+    <!-- ...contenido de carros igual que antes... -->
+  </div>
+
+  <div id="compradores" class="tab-content">
+    <h2>Gestión de Compradores</h2>
+    <form id="formCrearComprador">
+      <h3>Crear Nuevo Comprador</h3>
+      <div class="form-group"><input id="nombreComprador" placeholder="Nombre" required></div>
+      <div class="form-group"><input id="apellidoComprador" placeholder="Apellido" required></div>
+      <div class="form-group"><input id="marca" placeholder="Marca del carro" required></div>
+      <div class="form-group"><input id="modelo" placeholder="Modelo del carro" required></div>
+      <div class="form-group"><input id="saldoPendiente" placeholder="Saldo Pendiente" required></div>
+      <div class="form-group"><input id="placa" placeholder="Placa" required></div>
+      <button class="btn btn-primary" type="submit">Agregar Comprador</button>
+    </form>
+
+    <form id="formActualizarComprador">
+      <h3>Actualizar Comprador por ID</h3>
+      <div class="form-group"><input id="nombreComprador" placeholder="Nombre" required></div>
+      <div class="form-group"><input id="apellidoComprador" placeholder="Apellido" required></div>
+      <div class="form-group"><input id="marca" placeholder="Marca del carro" required></div>
+      <div class="form-group"><input id="modelo" placeholder="Modelo del carro" required></div>
+      <div class="form-group"><input id="saldoPendiente" placeholder="Saldo Pendiente" required></div>
+      <div class="form-group"><input id="placa" placeholder="Placa" required></div>
+      <button class="btn btn-info" type="submit">Actualizar</button>
+    </form>
+
+    <button class="btn btn-info" onclick="cargarCompradores()">Ver todos los compradores</button>
+
+    <div class="results">
+      <table id="tablaCompradores">
+        <thead>
+          <tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Marca</th><th>Modelo</th><th>Saldo Pendiente</th><th>Placa</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <script>
+    const api = "http://127.0.0.1:8000";
+
+    function showTab(tabId, event) {
+      document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    async function cargarCarros(tipo) {
+      const rutas = {
+        todos: "/carros",
+        activos: "/carros/activos",
+        eliminados: "/carros/eliminados",
+        vendidos: "/carros/vendidos",
+        no_vendidos: "/carros/no_vendidos"
+      };
+      try {
+        const res = await fetch(`${api}${rutas[tipo]}`);
+        if(!res.ok) throw new Error("Error al cargar carros");
+        const data = await res.json();
+        mostrarCarros(data);
+      } catch(e) {
+        alert(e.message);
+      }
+    }
+
+    function mostrarCarros(carros) {
+      const tbody = document.querySelector("#tablaCarros tbody");
       tbody.innerHTML = "";
-      carros.forEach(carro => {
-        const fila = `
+      if (carros.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No se encontraron carros.</td></tr>`;
+        return;
+      }
+      carros.forEach(c => {
+        tbody.innerHTML += `
           <tr>
-            <td>${carro.id}</td>
-            <td>${carro.marca}</td>
-            <td>${carro.modelo}</td>
-            <td>${carro.precio}</td>
-            <td>${carro.cilindrada}</td>
-            <td>${carro.potencia}</td>
-            <td>${carro.estado}</td>
-            <td>
-              <button class="btn-delete" onclick="eliminarCarro(${carro.id})">Eliminar</button>
-            </td>
+            <td>${c.id}</td>
+            <td>${c.marca}</td>
+            <td>${c.modelo}</td>
+            <td>${c.precio}</td>
+            <td>${c.cilindrada}</td>
+            <td>${c.potencia}</td>
+            <td>${c.estado}</td>
+            <td><button class="btn btn-danger" onclick="eliminarCarro(${c.id})">Eliminar</button></td>
           </tr>`;
-        tbody.innerHTML += fila;
       });
     }
 
     async function eliminarCarro(id) {
-      if (confirm("¿Seguro que quieres eliminar este carro?")) {
-        await fetch(`${apiUrl}/carro/${id}`, { method: "DELETE" });
-        cargarCarros();
+      if(!confirm("¿Seguro que deseas eliminar este carro?")) return;
+      try {
+        const res = await fetch(`${api}/carro/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("No se pudo eliminar el carro");
+        alert("Carro eliminado");
+        cargarCarros("activos");
+      } catch(e) {
+        alert(e.message);
       }
     }
 
-    document.querySelector("#formCarro").addEventListener("submit", async (e) => {
+    document.getElementById("formAgregarCarro").addEventListener("submit", async e => {
       e.preventDefault();
-      const data = {
+      const carro = {
         id: 0,
         marca: document.getElementById("marca").value,
         modelo: document.getElementById("modelo").value,
-        precio: document.getElementById("precio").value,
-        cilindrada: parseInt(document.getElementById("cilindrada").value),
-        potencia: parseInt(document.getElementById("potencia").value),
-        estado: document.getElementById("estado").value,
-        eliminado: "no"
+        precio: Number(document.getElementById("precio").value),
+        cilindrada: Number(document.getElementById("cilindrada").value),
+        potencia: Number(document.getElementById("potencia").value),
+        estado: document.getElementById("estado").value
       };
-
-      const res = await fetch(`${apiUrl}/carro`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (res.ok) {
-        document.querySelector("#formCarro").reset();
-        cargarCarros();
-      } else {
-        alert("Error al agregar carro");
+      try {
+        const res = await fetch(`${api}/carro`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(carro)
+        });
+        if (!res.ok) throw new Error("Error al crear el carro");
+        alert("Carro creado exitosamente");
+        e.target.reset();
+        cargarCarros("activos");
+      } catch(e) {
+        alert(e.message);
       }
     });
 
-    cargarCarros();
+    document.getElementById("formBuscarId").addEventListener("submit", async e => {
+      e.preventDefault();
+      const id = document.getElementById("buscarId").value;
+      try {
+        const res = await fetch(`${api}/carro/id/${id}`);
+        if (!res.ok) throw new Error("Carro no encontrado");
+        const carro = await res.json();
+        mostrarCarros([carro]);
+      } catch(e) {
+        alert(e.message);
+      }
+    });
+
+    document.getElementById("formBuscarPlaca").addEventListener("submit", async e => {
+      e.preventDefault();
+      const placa = document.getElementById("buscarPlaca").value;
+      try {
+        const res = await fetch(`${api}/carro/placa/${placa}`);
+        if (!res.ok) throw new Error("Carro no encontrado por placa");
+        const carro = await res.json();
+        mostrarCarros([carro]);
+      } catch(e) {
+        alert(e.message);
+      }
+    });
+
+    document.getElementById("formCrearComprador").addEventListener("submit", async e => {
+      e.preventDefault();
+      const comprador = {
+        id: 0,
+        nombre: document.getElementById("nombreComprador").value,
+        documento: document.getElementById("documento").value,
+        correo: document.getElementById("correo").value
+      };
+      try {
+        const res = await fetch(`${api}/comprador`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(comprador)
+        });
+        if (!res.ok) throw new Error("Error al crear comprador");
+        alert("Comprador creado exitosamente");
+        e.target.reset();
+      } catch(e) {
+        alert(e.message);
+      }
+    });
+
+    document.getElementById("formActualizarComprador").addEventListener("submit", async e => {
+      e.preventDefault();
+      const id = Number(document.getElementById("idComprador").value);
+      const comprador = {};
+      const nombre = document.getElementById("nuevoNombre").value;
+      const correo = document.getElementById("nuevoCorreo").value;
+      if(nombre) comprador.nombre = nombre;
+      if(correo) comprador.correo = correo;
+
+      if (Object.keys(comprador).length === 0) {
+        alert("Debes ingresar al menos un campo para actualizar");
+        return;
+      }
+
+      try {
+        comprador.id = id;
+        comprador.documento = "actualizar si es necesario";
+
+        const res = await fetch(`${api}/comprador/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(comprador)
+        });
+        if (!res.ok) throw new Error("Error al actualizar comprador");
+        alert("Comprador actualizado exitosamente");
+        e.target.reset();
+      } catch(e) {
+        alert(e.message);
+      }
+    });
+
+    cargarCarros("activos");
   </script>
 </body>
 </html>

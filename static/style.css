@@ -1,40 +1,147 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f6fa;
+  color: #333;
+  margin: 0;
+  padding: 20px;
 }
 
 .container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 12px;
+  max-width: 960px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 h1 {
-    color: #333;
-    text-align: center;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2f3640;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 15px;
 }
 
-li {
-    margin: 10px 0;
-    text-align: center;
+.tab {
+  background-color: #dcdde1;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #718093;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
+.tab.active {
+  background-color: #487eb0;
+  color: white;
 }
 
-a:hover {
-    color: #0056b3;
+.tab:hover:not(.active) {
+  background-color: #7f8fa6;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.btn-group {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  background-color: #273c75;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #40739e;
+}
+
+.btn-danger {
+  background-color: #e84118;
+}
+
+.btn-danger:hover {
+  background-color: #c23616;
+}
+
+.btn-success {
+  background-color: #44bd32;
+}
+
+.btn-success:hover {
+  background-color: #4cd137;
+}
+
+.btn-warning {
+  background-color: #fbc531;
+  color: #2f3640;
+}
+
+.btn-warning:hover {
+  background-color: #e1b12c;
+}
+
+form {
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+form input, form select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #dcdde1;
+  font-size: 14px;
+  flex: 1 1 120px;
+  min-width: 120px;
+}
+
+form button {
+  flex: 0 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+table, th, td {
+  border: 1px solid #dcdde1;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+thead {
+  background-color: #40739e;
+  color: white;
 }

@@ -76,17 +76,6 @@ def eliminar_carro(id_carro: int) -> Optional[CarroConId]:
 def buscar_carro_por_id(id_carro: int) -> Optional[CarroConId]:
     return next((c for c in leer_todos_los_carros() if c.id == id_carro), None)
 
-def buscar_carro_por_placa(placa: str) -> Optional[CarroConId]:
-    compradores = leer_todos_los_compradores()
-    for comprador in compradores:
-        if comprador.placa.lower() == placa.lower():
-            return next(
-                (c for c in leer_todos_los_carros()
-                 if c.modelo.lower() == comprador.modelo.lower() and c.marca.lower() == comprador.marca.lower()),
-                None
-            )
-    return None
-
 def buscar_y_modificar_carro_por_modelo(modelo: str, carro_actualizado: CarroConId) -> Optional[CarroConId]:
     for carro in leer_todos_los_carros():
         if carro.modelo.lower() == modelo.lower():
@@ -140,5 +129,8 @@ def actualizar_comprador(id_comprador: int, comprador_actualizado: CompradorConI
             escritor = csv.writer(archivo)
             escritor.writerow(['ID', 'Nombre', 'Apellido', 'Marca', 'Modelo', 'SaldoPendiente', 'Placa'])
             for c in compradores:
-                escritor.writerow([c.id, c.nombre, c.apellido, c.marca, c.modelo, c.saldo_pendiente, c.placa])
+                escritor.writerow([
+                    c.id, c.nombre, c.apellido, c.marca, c.modelo,
+                    c.saldo_pendiente, c.placa, c.id_carro
+                ])
     return actualizado
