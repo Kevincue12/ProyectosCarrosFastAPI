@@ -12,7 +12,7 @@ def leer_todos_los_carros() -> List[CarroConId]:
                     id=int(row['ID']),
                     marca=row['Marca'],
                     modelo=row['Modelo'],
-                    precio=row['Precio'],
+                    precio=int(row['Precio']),
                     cilindrada=int(row['Cilindrada']),
                     potencia=int(row['Potencia']),
                     estado=row['Estado'],

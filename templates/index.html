@@ -105,7 +105,6 @@
 
     <form id="formAgregarCarro">
       <h3>Agregar Carro</h3>
-      <div class="form-group"><input id="idCarro" type="number" min="1" placeholder="ID" required></div>
       <div class="form-group"><input id="marca" placeholder="Marca" required></div>
       <div class="form-group"><input id="modelo" placeholder="Modelo" required></div>
       <div class="form-group"><input id="precio" type="number" min="0" placeholder="Precio" required></div>
@@ -244,13 +243,13 @@
     document.getElementById("formAgregarCarro").addEventListener("submit", async e => {
       e.preventDefault();
       const carro = {
-        id: 0,
         marca: document.getElementById("marca").value,
         modelo: document.getElementById("modelo").value,
         precio: Number(document.getElementById("precio").value),
         cilindrada: Number(document.getElementById("cilindrada").value),
         potencia: Number(document.getElementById("potencia").value),
-        estado: document.getElementById("estado").value
+        estado: document.getElementById("estado").value,
+        eliminado: "No",
       };
       try {
         const res = await fetch(`${api}/carro`, {
@@ -282,57 +281,56 @@
 
 
     document.getElementById("formCrearComprador").addEventListener("submit", async e => {
-      e.preventDefault();
-      const comprador = {
-        id: 0,
-        nombre: document.getElementById("nombreComprador").value,
-        documento: document.getElementById("documento").value,
-        correo: document.getElementById("correo").value
-      };
-      try {
-        const res = await fetch(`${api}/comprador`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(comprador)
-        });
-        if (!res.ok) throw new Error("Error al crear comprador");
-        alert("Comprador creado exitosamente");
-        e.target.reset();
-      } catch(e) {
-        alert(e.message);
-      }
+   e.preventDefault();
+   const comprador = {
+    nombre: document.getElementById("nombreComprador").value,
+    apellido: document.getElementById("apellidoComprador").value,
+    marca: document.getElementById("marca").value,
+    modelo: document.getElementById("modelo").value,
+    saldo_pendiente: document.getElementById("saldoPendiente").value,
+    placa: document.getElementById("placa").value
+  };
+  try {
+    const res = await fetch(`${api}/comprador`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(comprador)
     });
+    if (!res.ok) throw new Error("Error al crear comprador");
+    alert("Comprador creado exitosamente");
+    e.target.reset();
+  } catch(e) {
+    alert(e.message);
+  }
+});
 
-    document.getElementById("formActualizarComprador").addEventListener("submit", async e => {
-      e.preventDefault();
-      const id = Number(document.getElementById("idComprador").value);
-      const comprador = {};
-      const nombre = document.getElementById("nuevoNombre").value;
-      const correo = document.getElementById("nuevoCorreo").value;
-      if(nombre) comprador.nombre = nombre;
-      if(correo) comprador.correo = correo;
 
-      if (Object.keys(comprador).length === 0) {
-        alert("Debes ingresar al menos un campo para actualizar");
-        return;
-      }
+document.getElementById("formActualizarComprador").addEventListener("submit", async e => {
+  e.preventDefault();
+  const compradorActualizado = {
+    id: Number(document.getElementById("idActualizar").value),
+    nombre: document.getElementById("nombreComprador").value,
+    apellido: document.getElementById("apellidoComprador").value,
+    marca: document.getElementById("marca").value,
+    modelo: document.getElementById("modelo").value,
+    saldo_pendiente: document.getElementById("saldoPendiente").value,
+    placa: document.getElementById("placa").value
+  };
 
-      try {
-        comprador.id = id;
-        comprador.documento = "actualizar si es necesario";
-
-        const res = await fetch(`${api}/comprador/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(comprador)
-        });
-        if (!res.ok) throw new Error("Error al actualizar comprador");
-        alert("Comprador actualizado exitosamente");
-        e.target.reset();
-      } catch(e) {
-        alert(e.message);
-      }
+  try {
+    const res = await fetch(`${api}/comprador/${compradorActualizado.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(compradorActualizado)
     });
+    if (!res.ok) throw new Error("Error al actualizar comprador");
+    alert("Comprador actualizado exitosamente");
+    e.target.reset();
+  } catch(e) {
+    alert(e.message);
+  }
+});
+
 
     cargarCarros("activos");
   </script>

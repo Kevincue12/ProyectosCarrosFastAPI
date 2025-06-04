@@ -4,7 +4,7 @@ class CarroConId(BaseModel):
     id: int
     marca: str
     modelo: str
-    precio: str
+    precio: int
     cilindrada: int
     potencia: int
     estado: str
@@ -18,3 +18,4 @@ class CompradorConId(BaseModel):
     modelo: str
     saldo_pendiente: str
     placa: str
+
