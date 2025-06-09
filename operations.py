@@ -47,18 +47,14 @@ def leer_carros_vendidos() -> List[CarroConId]:
 def actualizar_carro(id_carro: int, carro_actualizado: CarroConId) -> Optional[CarroConId]:
     carros = leer_todos_los_carros()
     actualizado = None
-    for carro in carros:
+    for i, carro in enumerate(carros):
         if carro.id == id_carro:
-            carro.marca = carro_actualizado.marca
-            carro.modelo = carro_actualizado.modelo
-            carro.precio = carro_actualizado.precio
-            carro.cilindrada = carro_actualizado.cilindrada
-            carro.potencia = carro_actualizado.potencia
-            carro.estado = carro_actualizado.estado
-            carro.eliminado = carro_actualizado.eliminado
-            actualizado = carro
+
+            carros[i] = carro_actualizado
+            actualizado = carro_actualizado
             break
     if actualizado:
+
         with open('carros.csv', mode='w', newline='', encoding='utf-8') as archivo:
             escritor = csv.writer(archivo)
             escritor.writerow(['ID', 'Marca', 'Modelo', 'Precio', 'Cilindrada', 'Potencia', 'Estado', 'Eliminado'])
@@ -152,6 +148,6 @@ def actualizar_comprador(id_comprador: int, comprador_actualizado: CompradorConI
             for c in compradores:
                 escritor.writerow([
                     c.id, c.nombre, c.apellido, c.marca, c.modelo,
-                    c.saldo_pendiente, c.placa, c.id_carro
+                    c.saldo_pendiente, c.placa,
                 ])
     return actualizado

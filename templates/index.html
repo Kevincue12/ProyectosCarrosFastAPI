@@ -138,7 +138,6 @@
   </div>
 
 <div id="carros" class="tab-content active">
-    <!-- ...contenido de carros igual que antes... -->
   </div>
 
   <div id="compradores" class="tab-content">
@@ -147,8 +146,8 @@
       <h3>Crear Nuevo Comprador</h3>
       <div class="form-group"><input id="nombreComprador" placeholder="Nombre" required></div>
       <div class="form-group"><input id="apellidoComprador" placeholder="Apellido" required></div>
-      <div class="form-group"><input id="marca" placeholder="Marca del carro" required></div>
-      <div class="form-group"><input id="modelo" placeholder="Modelo del carro" required></div>
+      <div class="form-group"><input id="marcaId" placeholder="Marca del carro" required></div>
+      <div class="form-group"><input id="modeloId" placeholder="Modelo del carro" required></div>
       <div class="form-group"><input id="saldoPendiente" placeholder="Saldo Pendiente" required></div>
       <div class="form-group"><input id="placa" placeholder="Placa" required></div>
       <button class="btn btn-primary" type="submit">Agregar Comprador</button>
@@ -156,14 +155,16 @@
 
     <form id="formActualizarComprador">
       <h3>Actualizar Comprador por ID</h3>
-      <div class="form-group"><input id="nombreComprador" placeholder="Nombre" required></div>
-      <div class="form-group"><input id="apellidoComprador" placeholder="Apellido" required></div>
-      <div class="form-group"><input id="marca" placeholder="Marca del carro" required></div>
-      <div class="form-group"><input id="modelo" placeholder="Modelo del carro" required></div>
-      <div class="form-group"><input id="saldoPendiente" placeholder="Saldo Pendiente" required></div>
-      <div class="form-group"><input id="placa" placeholder="Placa" required></div>
+      <div class="form-group"><input id="idActualizar" type="number" placeholder="ID del comprador" required></div>
+      <div class="form-group"><input id="actualizarNombreComprador" placeholder="Nombre" required></div>
+      <div class="form-group"><input id="actualizarApellidoComprador" placeholder="Apellido" required></div>
+      <div class="form-group"><input id="actualizarMarca" placeholder="Marca del carro" required></div>
+      <div class="form-group"><input id="actualizarModelo" placeholder="Modelo del carro" required></div>
+      <div class="form-group"><input id="actualizarSaldoPendiente" placeholder="Saldo Pendiente" required></div>
+      <div class="form-group"><input id="actualizarPlaca" placeholder="Placa" required></div>
       <button class="btn btn-info" type="submit">Actualizar</button>
     </form>
+
 
     <button class="btn btn-info" onclick="cargarCompradores()">Ver todos los compradores</button>
 
@@ -276,6 +277,7 @@ function mostrarCompradores(compradores) {
     document.getElementById("formAgregarCarro").addEventListener("submit", async e => {
       e.preventDefault();
       const carro = {
+       id : 0,
         marca: document.getElementById("marca").value,
         modelo: document.getElementById("modelo").value,
         precio: Number(document.getElementById("precio").value),
@@ -318,8 +320,8 @@ function mostrarCompradores(compradores) {
    const comprador = {
     nombre: document.getElementById("nombreComprador").value,
     apellido: document.getElementById("apellidoComprador").value,
-    marca: document.getElementById("marca").value,
-    modelo: document.getElementById("modelo").value,
+    marca: document.getElementById("marcaId").value,
+    modelo: document.getElementById("modeloId").value,
     saldo_pendiente: document.getElementById("saldoPendiente").value,
     placa: document.getElementById("placa").value
   };
@@ -342,12 +344,12 @@ document.getElementById("formActualizarComprador").addEventListener("submit", as
   e.preventDefault();
   const compradorActualizado = {
     id: Number(document.getElementById("idActualizar").value),
-    nombre: document.getElementById("nombreComprador").value,
-    apellido: document.getElementById("apellidoComprador").value,
-    marca: document.getElementById("marca").value,
-    modelo: document.getElementById("modelo").value,
-    saldo_pendiente: document.getElementById("saldoPendiente").value,
-    placa: document.getElementById("placa").value
+    nombre: document.getElementById("actualizarNombreComprador").value,
+    apellido: document.getElementById("actualizarApellidoComprador").value,
+    marca: document.getElementById("actualizarMarca").value,
+    modelo: document.getElementById("actualizarModelo").value,
+    saldo_pendiente: document.getElementById("actualizarSaldoPendiente").value,
+    placa: document.getElementById("actualizarPlaca").value
   };
 
   try {

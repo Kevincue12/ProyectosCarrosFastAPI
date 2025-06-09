@@ -31,3 +31,4 @@ ID,Marca,Modelo,Precio,Cilindrada,Potencia,Estado,Eliminado
 31,nissan,sentra,52000000,1900,160,Activo,No
 32,nissan,sentra,52000000,1900,160,Activo,No
 33,chevrolet,onix,52222222,13000,100,vendido,No
+34,chevrolet,onix,52222222,13000,100,vendido,si
