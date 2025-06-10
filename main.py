@@ -1,36 +1,3 @@
-import tempfile
-import shutil
-import os
-
-def setup_temp_csv():
-    temp_dir = tempfile.gettempdir()
-
-    # Ruta absoluta al directorio actual del archivo
-    base_dir = os.path.dirname(__file__)
-
-    # Rutas absolutas de los archivos fuente en tu repositorio
-    carros_origen = os.path.join(base_dir, "carros.csv")
-    compradores_origen = os.path.join(base_dir, "compradores.csv")
-
-    # Rutas temporales donde trabajará la app
-    carros_temp = os.path.join(temp_dir, "carros.csv")
-    compradores_temp = os.path.join(temp_dir, "compradores.csv")
-
-    # Copiar solo si no existen en la carpeta temporal
-    if not os.path.exists(carros_temp):
-        shutil.copy(carros_origen, carros_temp)
-
-    if not os.path.exists(compradores_temp):
-        shutil.copy(compradores_origen, compradores_temp)
-
-def get_ruta_carros():
-    return os.path.join(tempfile.gettempdir(), "carros.csv")
-
-def get_ruta_compradores():
-    return os.path.join(tempfile.gettempdir(), "compradores.csv")
-
-setup_temp_csv()
-
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -140,4 +107,3 @@ async def formulario_editar_comprador(request: Request, id_comprador: int):
     if comprador is None:
         raise HTTPException(status_code=404, detail="Comprador no encontrado")
     return templates.TemplateResponse("editar_comprador.html", {"request": request, "comprador": comprador})
-
