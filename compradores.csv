@@ -9,10 +9,3 @@ ID,Nombre,Apellido,Marca,Modelo,SaldoPendiente,Placa
 8,Andrés,Suárez,Hyundai,Accent,$11.000.000,GHI234
 9,Patricia,Reyes,Mazda,3,$13.000.000,STU567
 10,Roberto,Salazar,Renault,Duster,$16.000.000,VWX89011
-11,,,,,,
-12,,,,,,
-13,kevin,cuevas,Chevrolet,Onix,2555,abb112
-14,jairo,cuevas,,,966,abb112
-15,jairo,cuevas,123,,966,abb112
-16,jairo,cuevas,123,Onix,966,abb112
-17,jairo,cuevas,Chevrolet,Onix,966,abb112
