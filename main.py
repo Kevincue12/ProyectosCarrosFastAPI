@@ -1,3 +1,21 @@
+import tempfile
+import shutil
+import os
+
+def setup_temp_csv():
+    temp_dir = tempfile.gettempdir()  # Ruta segura para archivos temporales
+
+    carros_temp = os.path.join(temp_dir, "carros.csv")
+    compradores_temp = os.path.join(temp_dir, "compradores.csv")
+
+    if not os.path.exists(carros_temp):
+        shutil.copy("carros.csv", carros_temp)
+
+    if not os.path.exists(compradores_temp):
+        shutil.copy("compradores.csv", compradores_temp)
+
+setup_temp_csv()
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles

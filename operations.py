@@ -1,11 +1,22 @@
 import csv
+import os
+import tempfile
 from typing import List, Optional
 from models import CarroConId, CompradorConId, Comprador
 
+# 🔧 Funciones para obtener rutas de los archivos
+def get_ruta_carros():
+    return os.path.join(tempfile.gettempdir(), "carros.csv")
+
+def get_ruta_compradores():
+    return os.path.join(tempfile.gettempdir(), "compradores.csv")
+
+# 🚗 Funciones de carros
 def leer_todos_los_carros() -> List[CarroConId]:
     carros = []
+    ruta = get_ruta_carros()
     try:
-        with open('carros.csv', mode='r', encoding='utf-8') as archivo:
+        with open(ruta, mode='r', encoding='utf-8') as archivo:
             lector = csv.DictReader(archivo)
             for row in lector:
                 carros.append(CarroConId(
@@ -25,7 +36,8 @@ def leer_todos_los_carros() -> List[CarroConId]:
 def crear_carro(carro: CarroConId) -> CarroConId:
     carros = leer_todos_los_carros()
     carro.id = max((c.id for c in carros), default=0) + 1
-    with open('carros.csv', mode='a', newline='', encoding='utf-8') as archivo:
+    ruta = get_ruta_carros()
+    with open(ruta, mode='a', newline='', encoding='utf-8') as archivo:
         escritor = csv.writer(archivo)
         if archivo.tell() == 0:
             escritor.writerow(['ID', 'Marca', 'Modelo', 'Precio', 'Cilindrada', 'Potencia', 'Estado', 'Eliminado'])
@@ -49,13 +61,12 @@ def actualizar_carro(id_carro: int, carro_actualizado: CarroConId) -> Optional[C
     actualizado = None
     for i, carro in enumerate(carros):
         if carro.id == id_carro:
-
             carros[i] = carro_actualizado
             actualizado = carro_actualizado
             break
     if actualizado:
-
-        with open('carros.csv', mode='w', newline='', encoding='utf-8') as archivo:
+        ruta = get_ruta_carros()
+        with open(ruta, mode='w', newline='', encoding='utf-8') as archivo:
             escritor = csv.writer(archivo)
             escritor.writerow(['ID', 'Marca', 'Modelo', 'Precio', 'Cilindrada', 'Potencia', 'Estado', 'Eliminado'])
             for c in carros:
@@ -78,10 +89,12 @@ def buscar_y_modificar_carro_por_modelo(modelo: str, carro_actualizado: CarroCon
             return actualizar_carro(carro.id, carro_actualizado)
     return None
 
+# 👥 Funciones de compradores
 def leer_todos_los_compradores() -> List[CompradorConId]:
     compradores = []
+    ruta = get_ruta_compradores()
     try:
-        with open('compradores.csv', mode='r', encoding='utf-8') as archivo:
+        with open(ruta, mode='r', encoding='utf-8') as archivo:
             lector = csv.DictReader(archivo)
             for row in lector:
                 compradores.append(CompradorConId(
@@ -99,8 +112,9 @@ def leer_todos_los_compradores() -> List[CompradorConId]:
 
 def crear_comprador(comprador: Comprador) -> CompradorConId:
     nuevo_id = 1
+    ruta = get_ruta_compradores()
     try:
-        with open('compradores.csv', mode='r', encoding='utf-8') as archivo:
+        with open(ruta, mode='r', encoding='utf-8') as archivo:
             lector = csv.DictReader(archivo)
             ids = [int(row['ID']) for row in lector]
             if ids:
@@ -108,7 +122,7 @@ def crear_comprador(comprador: Comprador) -> CompradorConId:
     except FileNotFoundError:
         pass  # Si no existe, se inicia con ID 1
 
-    with open('compradores.csv', mode='a', newline='', encoding='utf-8') as archivo:
+    with open(ruta, mode='a', newline='', encoding='utf-8') as archivo:
         campos = ['ID', 'Nombre', 'Apellido', 'Marca', 'Modelo', 'SaldoPendiente', 'Placa']
         escritor = csv.DictWriter(archivo, fieldnames=campos)
 
@@ -127,7 +141,6 @@ def crear_comprador(comprador: Comprador) -> CompradorConId:
 
     return CompradorConId(id=nuevo_id, **comprador.dict())
 
-
 def actualizar_comprador(id_comprador: int, comprador_actualizado: CompradorConId) -> Optional[CompradorConId]:
     compradores = leer_todos_los_compradores()
     actualizado = None
@@ -142,7 +155,8 @@ def actualizar_comprador(id_comprador: int, comprador_actualizado: CompradorConI
             actualizado = comprador
             break
     if actualizado:
-        with open('compradores.csv', mode='w', newline='', encoding='utf-8') as archivo:
+        ruta = get_ruta_compradores()
+        with open(ruta, mode='w', newline='', encoding='utf-8') as archivo:
             escritor = csv.writer(archivo)
             escritor.writerow(['ID', 'Nombre', 'Apellido', 'Marca', 'Modelo', 'SaldoPendiente', 'Placa'])
             for c in compradores:
@@ -151,3 +165,4 @@ def actualizar_comprador(id_comprador: int, comprador_actualizado: CompradorConI
                     c.saldo_pendiente, c.placa,
                 ])
     return actualizado
+
